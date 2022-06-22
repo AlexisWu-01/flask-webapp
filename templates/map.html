@@ -5,8 +5,8 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>NEXT Website</title>
-        <!-- <link rel="stylesheet" href="styles.css"> -->
+        <title>Air Partners Website</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/map_styles.css') }}">
 		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
    integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
    crossorigin=""/>
@@ -23,13 +23,38 @@
 	</head>
 
 	<body style="margin: 0">
-		<h1>Test</h1>
+		<h1><b>Real Time Map</b></h1>
 		<div style="width: 100%; height: 100%" id="mapContainer">
 			<div id="map" style="height: 440px; border: 1px solid #AAA;">Div
 				<script>
+
+					//see the link above to see where the variable fileTobeRead comes from.
+					const KEY = 'VSZMMY8VT8FIRNIIXWTD2G7V';
+					const URI = 'https://api.quant-aq.com/device-api/';
+					
+					
+					function getData(URI) {
+						fetch(URI, {method: "GET", mode: "no-cors"})
+							.then(response => {if (!response.ok) {
+      							throw new Error(`HTTP error! Status: ${ response.status }`);
+    							} 
+								else {response.json()}})
+							.then(data => {
+								console.log(data);
+							})
+							.catch(error => {
+								console.error('Error:', error);
+							});
+							
+					}
+
+					var data = getData(URI);
+					console.log(JSON.stringify(data));
+
 					var lat = 42.361145;
 					var long =  -71.057083;
 					var map = L.map('map').setView([42.35, -71.08], 13);
+					var sensorArray = [];
 
 					// load a tile layer
 					L.tileLayer('http://tiles.mapc.org/basemap/{z}/{x}/{y}.png',
@@ -39,34 +64,57 @@
 						minZoom: 9
 						}).addTo(map);
 
-					var marker = L.marker([lat, long]).addTo(map);
-
-					var circle = L.circle([lat + 0.01, long + .04], {
+					var circleMarker = L.circleMarker([lat - 0.02, long - .02], {
 						color: 'red',
 						fillColor: '#f03',
 						fillOpacity: 0.5,
-						radius: 500
+						radius: 20
 					}).addTo(map);
 
-					// var polygon = L.polygon([
-					// 	[51.509, -0.08],
-					// 	[51.503, -0.06],
-					// 	[51.51, -0.047]
-					// ]).addTo(map);
 
-					marker.bindPopup("<b>Hello world!</b><br>I am a popup.");
-					circle.bindPopup("I am a circle.");
-					// polygon.bindPopup("I am a polygon.");
+					// Create button(s) for the marker popup
+					btnDiv = document.createElement('div'); // Dom = document object model -- creates div html element
+					exploreButton = createButton('Explore Data', btnDiv); // creates btn in container
+					reportButton = createButton('View Report', btnDiv); // creates btn in container
+					
+					// Add HTML content to the div element
+					btnDiv.innerHTML = 'Test' + '<br>'; // Inner html concatenates, to add more later use +=
+					btnDiv.append(exploreButton);
+					btnDiv.append(reportButton);
 
+					circleMarker.bindPopup(btnDiv);
+
+					L.DomEvent.on(exploreButton, 'click', function () {
+						window.open(window.location + '/' + 'explore');
+						});
+
+					L.DomEvent.on(reportButton, 'click', function () {
+						window.open(window.location + '/' + 'reports');
+					});
+
+					function createButton(label, container) {
+							var btn = L.DomUtil.create('button', '', container);
+							btn.setAttribute('type', 'button');
+							btn.innerHTML = label;
+							return btn;
+						}
 
 					function onMapClick(e) {
-						L.popup()
+						var popup = L.popup();
+						
+						popup
 							.setLatLng(e.latlng)
-							.setContent("You clicked the map at " + e.latlng.toString())
+							.setContent('You clicked the map')
 							.openOn(map);
+					}
+					
+					function revertUrl(e) {
+						alert("reverting");
+						window.open(window.location.slice(0, url.lastIndexOf('/')));
 					}
 
 					map.on('click', onMapClick);
+					map.on('remove', revertUrl);
 				</script>
 			</div>
 		</div>
