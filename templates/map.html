@@ -29,27 +29,42 @@
 				<script>
 
 					//see the link above to see where the variable fileTobeRead comes from.
-					const KEY = 'VSZMMY8VT8FIRNIIXWTD2G7V';
-					const URI = 'https://api.quant-aq.com/device-api/';
+					const KEY = 'FG6XTNR4E8BLPO6YNTA01B5B';
+					const URI = 'https://api.quant-aq.com/device-api/v1/account';
 					
 					
-					function getData(URI) {
-						fetch(URI, {method: "GET", mode: "no-cors"})
-							.then(response => {if (!response.ok) {
-      							throw new Error(`HTTP error! Status: ${ response.status }`);
-    							} 
-								else {response.json()}})
-							.then(data => {
-								console.log(data);
-							})
-							.catch(error => {
-								console.error('Error:', error);
-							});
+					async function getData(link) {
+						const response = await fetch("https://api.quant-aq.com/device-api/v1/account", {
+							method: "GET",
+							headers: {
+								Authorization: "Basic Rkc2WFROUjRFOEJMUE82WU5UQTAxQjVCOg=="
+							},
+							mode: "no-cors"
+						})
+						console.log(response.json());
+						// fetch(URI, {
+						// 	method: "GET", 
+						// 	headers: {'Authorization': 'Basic ' + btoa('FG6XTNR4E8BLPO6YNTA01B5B:')}, 
+						// 	mode: "no-cors"
+						// })
+						// 	.then(response => {if (!response.ok) {
+      					// 		throw new Error(`HTTP error! Status: ${ response.status }`);
+    					// 		} 
+						// 		else {return response.json()}})
+						// 	.then(data => {
+						// 		console.log(data);
+						// 		return data;
+						// 	})
+						// 	.catch(error => {
+						// 		console.error('Error:', error);
+						// 		// return error;
+						// 	});
 							
 					}
 
-					var data = getData(URI);
-					console.log(JSON.stringify(data));
+					getData(URI);
+					// var data = getData(URI);
+					// console.log(JSON.stringify(data));
 
 					var lat = 42.361145;
 					var long =  -71.057083;
