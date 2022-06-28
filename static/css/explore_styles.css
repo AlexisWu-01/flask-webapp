@@ -1,5 +1,10 @@
+#header {
+  margin:auto;
+  padding: 30px;
+}
+
 .button {
-    background-color: #60d1e5; /* Green */
+    background-color: #49c8f3; /* Green */
     border: none;
     color: white;
     padding: 15px 32px;

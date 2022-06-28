@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}
+        Air Partners Website
+        {% endblock %}
+    </title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/airpartners_favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Child Page CSS-->
+    <!--               -->
+    <!-- Real time map -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/map_styles.css') }}"> 
+    <!--               -->
+    <!-- Data Exploration Tool -->
+    <!--               -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/explore_styles.css') }}">
+    <!--               -->
+
+    <!-- leaflet packages -->
+    <!--                  -->
+    <!--                  -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+   integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+   crossorigin=""/>
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+    integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+    crossorigin=""></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+    <!--                  -->
+    <!--                  -->
+    <!--                  -->
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar__container">
+            <a href="/" id="ap__logo">
+                <img src="{{ url_for('static', filename='img/airpartners_logo.png') }}" alt="Air Partners" height="80%" width="100%">
+            </a>
+            
+            <div class="navbar__toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            <ul class="navbar__menu">
+                <li class="navbar__item">
+                    <a href="/" class="navbar__links">
+                    Map
+                    </a>
+                </li>
+                <li class="navbar__item">
+                    <a href="/explore" class="navbar__links">
+                    Data Tool
+                    </a>
+                </li>
+                <li class="navbar__item">
+                    <a href="/reports" class="navbar__links">
+                    Report Archives
+                    </a>
+                </li>
+                <li class="navbar__item">
+                    <a href="/forum" class="navbar__links">
+                    Forum
+                    </a>
+                </li>
+                <li class="navbar__btn">
+                    <a href="https://www.airpartners.org/" class="button">
+                    Air Partners Website
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div id="content">{% block content %}{% endblock %}</div>
+    <div id="footer">
+        {% block footer %}
+        <!-- Footer Section -->
+        <div class="footer__container">
+            <div class="footer__links">
+                <div class="footer__link--wrapper">
+                    <div class="footer__link--items">
+                        <h2>Learn More</h2>
+                        <a href="/explore">Data Exploration Tool</a>
+                        <a href="/reports">Report Archives</a>
+                        <a href="/forum">Forum</a>
+                        <a href="https://www.airpartners.org/">Website</a>
+                    </div>
+                    <!-- <div class="footer__link--items">
+                        <h2>Follow Us</h2>
+                        <a href="/">Facebook</a>
+                        <a href="/">Instagram</a>
+                        <a href="/">Twitter</a>
+                        <a href="/">LinkedIn</a>
+                        <a href="/">YouTube</a>
+                    </div> -->
+                </div>
+                <div class="footer__link--wrapper">
+                    <div class="footer__link--items">
+                        <h2>Contact Us</h2>
+                        <a href="/">Email</a>
+                        <a href="/">Discord</a>
+                        <a href="/">Mail</a>
+                    </div>
+                </div>
+            </div>
+            <div class="social__media">
+                <div class="social__media--wrap">
+                    <div class="footer__logo">
+                        <a href="https://www.airpartners.org/" id="footer__logo"><i><img src="{{ url_for('static', filename='img/airpartners_favicon.ico') }}" alt="Air Partners" style="padding: 5px;"></i>
+                            Air Partners</a>
+                    </div>
+                    <p class="website__rights">
+                        &copy; Air Partners 2022. All rights reserved.
+                    </p>
+                    <div class="social__icons">
+                        <a href="/" id="social__icon--link" target="_blank">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="/" id="social__icon--link" target="_blank">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="/" id="social__icon--link" target="_blank">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="/" id="social__icon--link" target="_blank">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="/" id="social__icon--link" target="_blank">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+      </div>
+</body>
+</html>

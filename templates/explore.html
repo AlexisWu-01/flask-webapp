@@ -1,19 +1,27 @@
+{% extends "base.html" %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Exploration Tool</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/explore_styles.css') }}">
+    <title>
+        {% block title %}
+        Data Exploration Tool
+        {% endblock %}
+    </title>
 </head>
 <body>
-    <h1><b>Explore Data</b></h1>
-    <div id="menu_container" class="website_header">
+    {% block content %}
+    <h1 id="header"><b>Explore Data</b></h1>
+    <!-- <div id="menu_container" class="website_header">
         <button type="button" class="button"><a target="_self" rel="noopener noreferrer" href="/">Realtime Map</a></button>
         <button type="button" class="button"><a target="_self" rel="noopener noreferrer" href="/forum">Forum</a></button>
         <button type="button" class="button"><a target="_self" rel="noopener noreferrer" href="/reports">Report Archives</a></button>
         <button type="button" class="button"><a target="_self" rel="noopener noreferrer" href="/explore">Data Exploration Tool</a></button>
-    </div>
+    </div><br> -->
+    <iframe sandbox="allow-same-origin allow-forms allow-modals allow-top-navigation" allow="picture-in-picture; autoplay; fullscreen;" src="https://www.youtube.com/watch?v=Jr_vfH_XRCI" frameborder="10" width="650" height="240" style="padding: 30px;"></iframe>
+    {% endblock %}
+
 </body>
 </html>
