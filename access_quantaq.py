@@ -1,30 +1,36 @@
 import quantaq
-import ConfigParser
+import json
+import quantaq_key
 from quantaq.utils import to_dataframe
-config = ConfigParser.ConfigParser()
-config.read("config.ini")
-QUANTAQ_APIKEY = config.get("quantaq_key", "QUANTAQ_APIKEY")
+QUANTAQ_APIKEY = quantaq_key.QUANTAQ_APIKEY
 client = quantaq.QuantAQAPIClient(api_key=QUANTAQ_APIKEY)
 
-
-
 def list_sensors():
-    devices_raw = to_dataframe(client.devices.list(filter="city,like,%_oxbury%"))
-    devices_simplified = devices_raw.iloc[:,[4,3,11,15,16,5,7,8,10,12]]
-    return devices_simplified,devices_raw
+    devices_raw = client.devices.list(filter="city,like,%_oxbury%")
+    return devices_raw
 
-def document_list(devices_raw, filename):
-    with open(filename) as f:
+def get_location_device(device):
+    lat = device['geo']['lat']
+    lon = device['geo']['lon']
+    return lat,lon
+
+def document_device_features(devices_raw, filename):
+    with open(filename,'w') as f:
         for device in devices_raw:
-            f.write(device)
+            f.write(json.dumps(device))
+            f.write('\n')
 
-def print_document(filename): # For debugging purposes if the file needs to be printed out
-    with open(filename) as f:
+def read_document(filename, device_list={}): # For debugging purposes if the file needs to be printed out
+    with open(filename,'r') as f:
         for line in f.readlines():
+            line = json.loads(line)
+            name = line["id"]
+            device_list[name] = line
             print(line)
 
+def update_sensor_list(filename="sensor_list.txt", devices_raw=list_sensors()):
+    document_device_features(devices_raw, filename)
+    read_document(filename)
+
 if __name__ == "__main__":
-    filename = "sensor_list.txt"
-    devices_simplified, devices_raw = list_sensors()
-    document_list(devices_raw, filename)
-    print_document(filename)
+    update_sensor_list()

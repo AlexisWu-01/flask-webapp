@@ -1,2 +1,4 @@
 *.pyc
-quantaq_key.txt
+quantaq_key.py
+js_api_access.txt
+sensor_list.txt

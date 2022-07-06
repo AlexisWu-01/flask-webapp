@@ -1,5 +1,6 @@
 from markupsafe import escape
 from flask import Flask, render_template
+from access_quantaq import update_sensor_list, read_document
 # from flask_mail import Message
 # from flaskbb.extensions import mail, celery
 
@@ -7,7 +8,10 @@ app = Flask(__name__)
 
 @app.route('/')
 def map_func():
-	return render_template("map.html")
+	sensor_list = {}
+	update_sensor_list("sensor_list.txt")
+	read_document("sensor_list.txt", sensor_list)
+	return render_template("map.html", sensor_list=sensor_list)
 
 @app.route('/#close/reports/')
 @app.route('/reports/')
