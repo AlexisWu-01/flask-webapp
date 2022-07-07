@@ -7,8 +7,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Realtime Map</title>
-        
-		
+		<script type="text/javascript" {{ url_for('static', filename='scripts/flasktojs.js')}}></script>
 	</head>
 	
 	<body>
@@ -20,14 +19,29 @@
 			</div>
 			<div style="width: 80%; height: 100%" id="mapContainer">
 				<div id="map" style="height: 440px; border: 1px solid #AAA;">Test
-					<script>
+					<script type="text/javascript">
+						var sensor_list = {{ sensor_list|tojson|safe }};
+						keys = Object.keys(sensor_list);
+
+						var sensor_locations = [];
+
+						for (let i = 0; i < keys.length; i++) {
+							var loc = sensor_list[keys[i].toString()];
+							var lat = loc['geo']['lat'];
+							var long = loc['geo']['lon'];
+							
+							if (typeof lat === typeof 42.361145 && typeof long === typeof 42.361145) {
+								sensor_locations.push([lat,long]);
+							};
+						}
+						
 						
 						var lat = 42.361145;
 						var long =  -71.057083;
 						var map = new L.map('map', {'zoomControl':false}).setView([42.35, -71.08], 13);
 						var sensorArray = [];
 
-						// load a tile layer
+						// load a tile layer 
 						L.tileLayer('http://tiles.mapc.org/basemap/{z}/{x}/{y}.png',
 							{
 							attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>, Data by <a href="http://mass.gov/mgis">MassGIS</a>',
@@ -35,33 +49,39 @@
 							minZoom: 9
 							}).addTo(map);
 
-						var circleMarker = L.circleMarker([lat - 0.02, long - .02], {
-							color: 'red',
-							fillColor: '#f03',
-							fillOpacity: 0.5,
-							radius: 20
-						}).addTo(map);
+						for (let i = 0; i < sensor_locations.length; i++) {
+							x = sensor_locations[i][0];
+							y = sensor_locations[i][1];
+							var circleMarker = L.circleMarker([x, y], {
+								color: 'red',
+								fillColor: '#f03',
+								fillOpacity: 0.5,
+								radius: 10
+							}).addTo(map);
+							addButtons(circleMarker);
+						}
 
+						function addButtons(map_object) {
+							// Create button(s) for the marker popup
+							btnDiv = document.createElement('div'); // Dom = document object model -- creates div html element
+							exploreButton = createButton('Explore Data', btnDiv); // creates btn in container
+							reportButton = createButton('View Report', btnDiv); // creates btn in container
+							
+							// Add HTML content to the div element
+							btnDiv.innerHTML = 'Test' + '<br>'; // Inner html concatenates, to add more later use +=
+							btnDiv.append(exploreButton);
+							btnDiv.append(reportButton);
 
-						// Create button(s) for the marker popup
-						btnDiv = document.createElement('div'); // Dom = document object model -- creates div html element
-						exploreButton = createButton('Explore Data', btnDiv); // creates btn in container
-						reportButton = createButton('View Report', btnDiv); // creates btn in container
-						
-						// Add HTML content to the div element
-						btnDiv.innerHTML = 'Test' + '<br>'; // Inner html concatenates, to add more later use +=
-						btnDiv.append(exploreButton);
-						btnDiv.append(reportButton);
+							map_object.bindPopup(btnDiv);
 
-						circleMarker.bindPopup(btnDiv);
-
-						L.DomEvent.on(exploreButton, 'click', function () {
+							L.DomEvent.on(exploreButton, 'click', function () {
 							window.open(window.location + '/' + 'explore');
 							});
 
-						L.DomEvent.on(reportButton, 'click', function () {
-							window.open(window.location + '/' + 'reports');
-						});
+							L.DomEvent.on(reportButton, 'click', function () {
+								window.open(window.location + '/' + 'reports');
+							});
+						}
 
 						function createButton(label, container) {
 								var btn = L.DomUtil.create('button', '', container);
@@ -89,7 +109,8 @@
 					</script>
 				</div>
 			</div>
-			<div> {{ sensor_list }}</div>
+			<br>
+			<div></div>
 		</div>
 		
 		{% endblock %}
