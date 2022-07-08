@@ -39,5 +39,22 @@ def update_sensor_list(filename="sensor_list.json", devices_raw=list_sensors()):
     document_device_features(devices_raw, full_path)
     return read_document(full_path)
 
+def append_sensor_data(data={}):
+    sns = get_sensor_ids()
+    print(sns)
+    for id in sns:
+        data_raw = client.data.get(id=id, sn=sns[id])
+        print(data_raw)
+
+def get_sensor_ids():
+    sns = {}
+    devices_raw = client.devices.list(filter="city,like,%_oxbury%")
+    for device in devices_raw:
+        id = device["id"]
+        sn = device["sn"]
+        sns[id] = sn
+    return sns
+
 if __name__ == "__main__":
-    update_sensor_list()
+    # update_sensor_list()
+    append_sensor_data()

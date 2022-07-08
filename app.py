@@ -1,6 +1,8 @@
 from markupsafe import escape
 from flask import Flask, render_template
 from access_quantaq import update_sensor_list
+from update_request import reloadapi
+
 # from flask_mail import Message
 # from flaskbb.extensions import mail, celery
 

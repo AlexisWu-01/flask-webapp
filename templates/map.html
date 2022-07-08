@@ -21,6 +21,7 @@
 				<div id="map" style="height: 440px; border: 1px solid #AAA;">Test
 					<script type="text/javascript">
 						var sensor_list = {{ sensor_list|tojson|safe }};
+						console.log(sensor_list);
 						keys = Object.keys(sensor_list);
 
 						var sensor_locations = [];
