@@ -1,4 +1,5 @@
 *.pyc
 quantaq_key.py
 js_api_access.txt
-sensor_list.txt
+static/scripts/sensor_list.json
+cherry.py

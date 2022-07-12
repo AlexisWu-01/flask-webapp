@@ -1,6 +1,6 @@
 import quantaq
 import json
-import quantaq_key
+from . import quantaq_key
 import os.path
 from quantaq.utils import to_dataframe
 # import matplotlib.pyplot as plt
