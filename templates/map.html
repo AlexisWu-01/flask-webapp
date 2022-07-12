@@ -17,14 +17,16 @@
 				<h1><b>Real Time Map</b></h1>
 				<p>Here you are able to interact with the map to locate our sensors and see real data in real time.</p>
 			</div>
-			<div style="width: 80%; height: 100%" id="mapContainer">
+			<div style="width: 90%; height: 100%" id="mapContainer">
 				<div id="map" style="height: 440px; border: 1px solid #AAA;">Test
 					<script type="text/javascript">
 						var sensor_list = {{ sensor_list|tojson|safe }};
-						console.log(sensor_list);
+						var sensor_data = {{ data|tojson|safe }};
 						keys = Object.keys(sensor_list);
 
-						var sensor_locations = [];
+						console.log(sensor_data);
+
+						var sensor_array = [];
 
 						for (let i = 0; i < keys.length; i++) {
 							var loc = sensor_list[keys[i].toString()];
@@ -32,15 +34,15 @@
 							var long = loc['geo']['lon'];
 							
 							if (typeof lat === typeof 42.361145 && typeof long === typeof 42.361145) {
-								sensor_locations.push([lat,long]);
+								sensor_array.push([lat, long, sensor_data[keys[i]]]);
 							};
 						}
 						
-						
+						console.log(sensor_array);
 						var lat = 42.361145;
 						var long =  -71.057083;
 						var map = new L.map('map', {'zoomControl':false}).setView([42.35, -71.08], 13);
-						var sensorArray = [];
+						
 
 						// load a tile layer 
 						L.tileLayer('http://tiles.mapc.org/basemap/{z}/{x}/{y}.png',
@@ -50,26 +52,29 @@
 							minZoom: 9
 							}).addTo(map);
 
-						for (let i = 0; i < sensor_locations.length; i++) {
-							x = sensor_locations[i][0];
-							y = sensor_locations[i][1];
+						for (let i = 0; i < sensor_array.length; i++) {
+							x = sensor_array[i][0];
+							y = sensor_array[i][1];
 							var circleMarker = L.circleMarker([x, y], {
 								color: 'red',
 								fillColor: '#f03',
 								fillOpacity: 0.5,
 								radius: 10
 							}).addTo(map);
-							addButtons(circleMarker);
+							var text = "PM1 in your area: " + sensor_array[i][2]['pm1'] + "<br>" +
+									   "PM2.5 in your area: " + sensor_array[i][2]['pm25'] + "<br>" +
+									   "PM10 in your area: " + sensor_array[i][2]['pm10'] + "<br>";
+							addButtons(circleMarker, text);
 						}
 
-						function addButtons(map_object) {
+						function addButtons(map_object, text) {
 							// Create button(s) for the marker popup
 							btnDiv = document.createElement('div'); // Dom = document object model -- creates div html element
 							exploreButton = createButton('Explore Data', btnDiv); // creates btn in container
 							reportButton = createButton('View Report', btnDiv); // creates btn in container
 							
 							// Add HTML content to the div element
-							btnDiv.innerHTML = 'Test' + '<br>'; // Inner html concatenates, to add more later use +=
+							btnDiv.innerHTML = text + '<br>'; // Inner html concatenates, to add more later use +=
 							btnDiv.append(exploreButton);
 							btnDiv.append(reportButton);
 

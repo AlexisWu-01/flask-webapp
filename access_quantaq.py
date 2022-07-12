@@ -3,6 +3,7 @@ import json
 import quantaq_key
 import os.path
 from quantaq.utils import to_dataframe
+# import matplotlib.pyplot as plt
 QUANTAQ_APIKEY = quantaq_key.QUANTAQ_APIKEY
 client = quantaq.QuantAQAPIClient(api_key=QUANTAQ_APIKEY)
 
@@ -39,22 +40,34 @@ def update_sensor_list(filename="sensor_list.json", devices_raw=list_sensors()):
     document_device_features(devices_raw, full_path)
     return read_document(full_path)
 
-def append_sensor_data(data={}):
-    sns = get_sensor_ids()
-    print(sns)
-    for id in sns:
-        data_raw = client.data.get(id=id, sn=sns[id])
-        print(data_raw)
-
 def get_sensor_ids():
     sns = {}
-    devices_raw = client.devices.list(filter="city,like,%_oxbury%")
+    devices_raw = client.devices.list(filter="city,like,Roxbury;")
     for device in devices_raw:
         id = device["id"]
         sn = device["sn"]
         sns[id] = sn
     return sns
 
+def append_sensor_data(data={}):
+    sns = get_sensor_ids()
+    for id in sns:
+        data_raw = client.data.get(id=id, sn=sns[id])
+        data[id] = {'met': data_raw['met'] if data_raw['met'] is not None else -1,
+                    'pm1': data_raw['pm1'] if data_raw['pm1'] is not None else -1,
+                    'pm25': data_raw['pm25'] if data_raw['pm25'] is not None else -1,
+                    'pm10':data_raw['pm10'] if data_raw['pm10'] is not None else -1}
+    # for k,v in data.items():
+    #     print(k, " : " , v, "\n")
+    
+
+
+# def plot_sensor_data(data, plots):
+#     for id in data:
+
 if __name__ == "__main__":
     # update_sensor_list()
+    # teams = client.teams.list()
+    # for i in range(len(teams)):
+    #     print(teams[i]['id'])
     append_sensor_data()

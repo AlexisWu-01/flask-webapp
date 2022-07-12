@@ -10,5 +10,5 @@ a, a:hover, a:visited, a:active {
 
 .main_text {
     margin:auto;
-    padding:20px;
+    width:90%;
 }
