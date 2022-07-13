@@ -30,8 +30,6 @@ def read_document(filename):
     with open(filename,'r') as f:
         s = ''.join(f.readlines())
         store = json.loads(s)
-        for k,v in store.items():
-            print(k, ":", v)
         return store
 
 def update_sensor_list(filename="sensor_list.json", devices_raw=list_sensors()):

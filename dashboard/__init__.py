@@ -25,6 +25,7 @@ def init_dashboard(server):
     # Create Layout
     dash_app.layout = html.Div(
         children=[
+            html.H1(children="Hello World!")
         ],
         id="dash-container",
     )

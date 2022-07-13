@@ -2,9 +2,20 @@
 
 html_layout = """
 <!DOCTYPE html>
-    <html>
-        <head>
-            <title> 325 on the dashboard </title>
-        </head>
-    </html>
+<html>
+    <head>
+        {%metas%}
+        <title>{%title%}</title>
+        {%favicon%}
+        {%css%}
+    </head>
+    <body>
+        {%app_entry%}
+        <footer>
+            {%config%}
+            {%scripts%}
+            {%renderer%}
+        </footer>
+    </body>
+</html>
 """

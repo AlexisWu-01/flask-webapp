@@ -12,4 +12,7 @@ def init_app():
         # Import Routes and other core parts
         from . import routes
 
+        from .dashboard import init_dashboard
+        app = init_dashboard(app)
+
         return app
