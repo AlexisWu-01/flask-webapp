@@ -33,14 +33,14 @@
 							var lat = loc['geo']['lat'];
 							var long = loc['geo']['lon'];
 							
-							if (typeof lat === typeof 42.361145 && typeof long === typeof 42.361145) {
+							if (typeof lat === typeof 42.3126 && typeof long === typeof 42.3126) {
 								sensor_array.push([lat, long, sensor_data[keys[i]]]);
 							};
 						}
 						
 						console.log(sensor_array);
-						var lat = 42.361145;
-						var long =  -71.057083;
+						var lat = 42.3126;
+						var long =  -71.0899;
 						var map = new L.map('map', {'zoomControl':false}).setView([42.35, -71.08], 13);
 						
 

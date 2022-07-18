@@ -41,10 +41,10 @@ def map_func():
 def reports_func():
 	return render_template("reports.html")
 
-@app.route('/#close/explore')
-@app.route('/explore')
-def explore_func():
-	return render_template("explore.html")
+# @app.route('/#close/explore')
+# @app.route('/explore')
+# def explore_func():
+# 	return render_template("explore.html")
 
 # @app.route('/#close/forum')
 # @app.route('/forum')
