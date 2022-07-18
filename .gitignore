@@ -3,3 +3,5 @@ quantaq_key.py
 js_api_access.txt
 static/scripts/sensor_list.json
 cherry.py
+.venv/
+get-pip.py
