@@ -8,4 +8,4 @@ app = src.init_app()
 # db = SQLAlchemy(app)
 
 if __name__ == "__main__":
-	app.run(debug = False)
+	app.run(debug = False, port=33507)
