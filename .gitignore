@@ -1,7 +1,7 @@
 *.pyc
-quantaq_key.py
-js_api_access.txt
-static/scripts/sensor_list.json
-cherry.py
+src/quantaq_key.py
+src/js_api_access.txt
+src/static/scripts/sensor_list.json
+src/cherry.py
 .venv/
 get-pip.py

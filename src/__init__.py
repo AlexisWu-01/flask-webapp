@@ -10,9 +10,9 @@ def init_app():
 
     with app.app_context():
         # Import Routes and other core parts
-        from . import routes
+        import src.routes as routes
 
-        from .data_exploration_tool import init_dashboard
+        from src.data_exploration_tool import init_dashboard
         app = init_dashboard(app)
 
         return app

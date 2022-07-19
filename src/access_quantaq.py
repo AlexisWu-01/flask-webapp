@@ -33,7 +33,7 @@ def read_document(filename):
         return store
 
 def update_sensor_list(filename="sensor_list.json", devices_raw=list_sensors()):
-    path = "static/scripts/"
+    path = "./src/static/scripts/"
     full_path = os.path.join(path + filename)
     document_device_features(devices_raw, full_path)
     return read_document(full_path)
