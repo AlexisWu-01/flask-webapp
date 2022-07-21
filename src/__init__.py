@@ -12,7 +12,7 @@ def init_app():
         # Import Routes and other core parts
         import src.routes as routes
 
-        from src.data_exploration_tool import init_dashboard
+        from src.data_tool import init_dashboard
         app = init_dashboard(app)
 
         return app
