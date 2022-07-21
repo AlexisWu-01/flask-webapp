@@ -53,7 +53,7 @@ This should be enough for the existing code to access the Quant-AQ API.
 
 # File Catalog #
 
-`__init.py` indicates to Python that this folder is treated as a package and is standard for shipping code modules.
+`__init__.py` indicates to Python that this folder is treated as a package and is standard for shipping code modules.
 This does not change much, but allows imports to be cleaner and in this case makes only one or two files really critical to understand how the app is being run. One notable change that initializing a package comes with is the need for a `.` before any import in the same folder. If importing from `quantaq_key.py`, for example, I would say:
 
 `from .quantaq_key import QUANTAQ_KEY`
@@ -61,6 +61,8 @@ This does not change much, but allows imports to be cleaner and in this case mak
 instead of the usual
 
 `from quantaq_key`
+
+There are two packages in this repository: `src` and `data-exploration-tool`.
 
 # Deployment #
 
