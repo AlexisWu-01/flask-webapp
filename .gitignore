@@ -4,6 +4,7 @@ src/js_api_access.txt
 src/static/scripts/sensor_list.json
 src/cherry.py
 .venv/
+venv/
 get-pip.py
 
 src/data_tool/__pycache__/
