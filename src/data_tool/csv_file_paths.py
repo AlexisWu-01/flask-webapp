@@ -60,12 +60,12 @@ elif user_profile == "zxiong":
 
 else: # if not Ian or Lauren, feel free to make a copy of this and change the file names below:
     raw_csv_paths = [
-        "./data_tool/data/east-boston/raw/sn45-final-w-ML-PM.csv",
-        "./data_tool/data/east-boston/raw/sn46-final-w-ML-PM.csv",
-        "./data_tool/data/east-boston/raw/sn49-final-w-ML-PM.csv",
-        "./data_tool/data/east-boston/raw/sn62-final-w-ML-PM.csv",
-        "./data_tool/data/east-boston/raw/sn67-final-w-ML-PM.csv",
-        "./data_tool/data/east-boston/raw/sn72-final-w-ML-PM.csv",
+        "./src/data_tool/data/east-boston/raw/sn45-final-w-ML-PM.csv",
+        "./src/data_tool/data/east-boston/raw/sn46-final-w-ML-PM.csv",
+        "./src/data_tool/data/east-boston/raw/sn49-final-w-ML-PM.csv",
+        "./src/data_tool/data/east-boston/raw/sn62-final-w-ML-PM.csv",
+        "./src/data_tool/data/east-boston/raw/sn67-final-w-ML-PM.csv",
+        "./src/data_tool/data/east-boston/raw/sn72-final-w-ML-PM.csv",
     ]
 
     processed_csv_paths = [
@@ -77,10 +77,8 @@ else: # if not Ian or Lauren, feel free to make a copy of this and change the fi
         "./src/data_tool/data/east-boston/processed/sn72-final-w-ML-PM.parquet",
     ]
     
-    stats_file = "./src/data_etool/data/stats.parquet"
+    stats_file = "./src/data_tool/data/stats.parquet"
 
-    flight_csv_dir = "./src/data_tool/data/flights/raw/"
-
+    flight_csv_dir =       "./src/data_tool/data/flights/raw/"
     processed_flight_dir = "./src/data_tool/data/flights/processed/"
-
-    final_flights = "./src/data_tool/data/flights/final/combined_flights.parquet"
+    final_flights =        "./src/data_tool/data/flights/final/combined_flights.parquet"

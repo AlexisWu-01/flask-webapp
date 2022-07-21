@@ -103,12 +103,8 @@ class FlightLoader():
             pd.concat([self.df_flights, df_new], axis = 'index')
 
     def add_flight_data_to(self, df, date_time_column_name = "timestamp_local"):
-        print("self.df_flights = ", self.df_flights)
         df_combined = df.reset_index()
         df_combined.merge(self.df_flights, left_on = date_time_column_name, right_on = "Date_Time")
-        print(df_combined)
         df_combined.set_index(date_time_column_name)
-        print("index set", df_combined)
         df_combined = df_combined.rename(columns = {"Date_Time": date_time_column_name})
-        print("renamed", df_combined)
         return df_combined
