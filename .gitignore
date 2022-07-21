@@ -5,3 +5,8 @@ src/static/scripts/sensor_list.json
 src/cherry.py
 .venv/
 get-pip.py
+
+src/data_tool/__pycache__/
+src/data_tool/.vscode/
+src/data_tool/data/east-boston/raw/*
+src/data_tool/data/flights/raw/*
