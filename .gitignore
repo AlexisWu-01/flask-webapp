@@ -1,4 +1,5 @@
 *.pyc
+access_quantaq_copy.py
 src/quantaq_key.py
 src/js_api_access.txt
 src/static/scripts/sensor_list.json
