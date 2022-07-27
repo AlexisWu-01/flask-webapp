@@ -2,8 +2,7 @@ import quantaq
 import json
 from . import quantaq_key
 import os.path
-from quantaq.utils import to_dataframe
-# import matplotlib.pyplot as plt
+from datetime import date
 QUANTAQ_APIKEY = quantaq_key.QUANTAQ_APIKEY
 client = quantaq.QuantAQAPIClient(api_key=QUANTAQ_APIKEY)
 
@@ -40,7 +39,7 @@ def update_sensor_list(filename="sensor_list.json", devices_raw=list_sensors()):
 
 def get_sensor_ids():
     sns = {}
-    devices_raw = client.devices.list(filter="city,like,Roxbury;")
+    devices_raw = client.devices.list(filter="city,like,Roxbury")
     for device in devices_raw:
         id = device["id"]
         sn = device["sn"]
@@ -50,22 +49,30 @@ def get_sensor_ids():
 def append_sensor_data(data={}):
     sns = get_sensor_ids()
     for id in sns:
-        data_raw = client.data.get(id=id, sn=sns[id])
-        data[id] = {'met': data_raw['met'] if data_raw['met'] is not None else -1,
-                    'pm1': data_raw['pm1'] if data_raw['pm1'] is not None else -1,
-                    'pm25': data_raw['pm25'] if data_raw['pm25'] is not None else -1,
-                    'pm10':data_raw['pm10'] if data_raw['pm10'] is not None else -1}
-    # for k,v in data.items():
-    #     print(k, " : " , v, "\n")
-    
+        data_raw = client.data.list(sn=sns[id], start=str(date.today()), sort="timestamp,asc", limit=1)
+        
+        # data_raw = client.data.bydate(sn=sns[id], date=str(date.today()), sort="timestamp,asc", limit=1)
+        # data_raw = client.data.get(id=id, sn=sns[id])
+        if len(data_raw) > 0:
+            d = data_raw[0]
+            data[id] = {'lat': d['geo']['lat'] if d['geo']['lat'] is not None else -1,
+                        'lon': d['geo']['lon'] if d['geo']['lon'] is not None else -1,
+                        'pm1': "Good" if d['pm1'] < 2 else "Okay" if d["pm1"] >= 2 and d['pm1'] < 5 else "Bad" if d['pm1'] >= 5 else "None",
+                        'pm25': "Good" if d['pm25'] < 5 else "Okay" if d["pm25"] >= 5 and d['pm25'] < 12.5 else "Bad" if d['pm25'] >= 12.5 else "None",
+                        'pm10': "Good" if d['pm1'] < 20 else "Okay" if d["pm1"] >= 20 and d['pm1'] < 35 else "Bad" if d['pm1'] >= 35 else "None"}
 
+            if 'met' in d: # For compatibility with older sensors
+                if d['met'] is not None:
+                    data[id]['met'] = d['met']
+                else:
+                    data[id]['met'] = -1
 
 # def plot_sensor_data(data, plots):
 #     for id in data:
 
-if __name__ == "__main__":
-    # update_sensor_list()
-    # teams = client.teams.list()
-    # for i in range(len(teams)):
-    #     print(teams[i]['id'])
-    append_sensor_data()
+# if __name__ == "__main__":
+#     # update_sensor_list()
+#     # teams = client.teams.list()
+#     # for i in range(len(teams)):
+#     #     print(teams[i]['id'])
+#     append_sensor_data()

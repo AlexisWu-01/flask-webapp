@@ -31,10 +31,9 @@ from .access_quantaq import append_sensor_data, update_sensor_list
 
 @app.route('/')
 def map_func():
-	sensor_list = update_sensor_list("sensor_list.json")
 	data = {}
 	append_sensor_data(data)
-	return render_template("map.html", sensor_list=sensor_list, data=data)
+	return render_template("map.html", data=data)
 
 @app.route('/#close/reports/')
 @app.route('/reports/')
