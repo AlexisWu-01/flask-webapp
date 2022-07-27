@@ -20,84 +20,86 @@
 			<div style="width: 90%; height: 100%" id="mapContainer">
 				<div id="map" style="height: 440px; border: 1px solid #AAA;">Test
 					<script type="text/javascript">
-						var sensor_data = {{ data|tojson|safe }};
-						const keys = Object.keys(sensor_data);
+						document.addEventListener("DOMContentLoaded", function(event) { 
+							var sensor_data = {{ data|tojson|safe }};
+							const keys = Object.keys(sensor_data);
 
-						console.log(sensor_data);
+							console.log(sensor_data);
 
-						var lat = 42.3126;
-						var long =  -71.0899;
-						var map = new L.map('map', {'zoomControl':false}).setView([42.35, -71.08], 13);
+							var lat = 42.3126;
+							var long =  -71.0899;
+							var map = new L.map('map', {'zoomControl':false}).setView([42.35, -71.08], 13);
 
-						// load a tile layer 
-						L.tileLayer('http://tiles.mapc.org/basemap/{z}/{x}/{y}.png',
-							{
-							attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>, Data by <a href="http://mass.gov/mgis">MassGIS</a>',
-							maxZoom: 17,
-							minZoom: 9
-							}).addTo(map);
+							// load a tile layer 
+							L.tileLayer('http://tiles.mapc.org/basemap/{z}/{x}/{y}.png',
+								{
+								attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>, Data by <a href="http://mass.gov/mgis">MassGIS</a>',
+								maxZoom: 17,
+								minZoom: 9
+								}).addTo(map);
 
-						for (const property in sensor_data) {
-							x = sensor_data[property]['lat'];
-							y = sensor_data[property]['lon'];
-							var circleMarker = L.circleMarker([x, y], {
-								color: 'blue',
-								fillColor: 'blue',
-								fillOpacity: 0.5,
-								radius: 10
-							}).addTo(map);
-							var text = "Sensor " + property.toString() + "<br>" +
-									   "PM1 in your area: " + sensor_data[property]['pm1'] + "<br>" +
-									   "PM2.5 in your area: " + sensor_data[property]['pm25'] + "<br>" +
-									   "PM10 in your area: " + sensor_data[property]['pm10'] + "<br>";
-							addButtons(circleMarker, text);
-						}
-
-						function addButtons(map_object, text) {
-							// Create button(s) for the marker popup
-							btnDiv = document.createElement('div'); // Dom = document object model -- creates div html element
-							exploreButton = createButton('Explore Data', btnDiv); // creates btn in container
-							reportButton = createButton('View Report', btnDiv); // creates btn in container
-							
-							// Add HTML content to the div element
-							btnDiv.innerHTML = text + '<br>'; // Inner html concatenates, to add more later use +=
-							btnDiv.append(exploreButton);
-							btnDiv.append(reportButton);
-
-							map_object.bindPopup(btnDiv);
-
-							L.DomEvent.on(exploreButton, 'click', function () {
-							window.open(window.location + '/' + 'dashapp');
-							});
-
-							L.DomEvent.on(reportButton, 'click', function () {
-								window.open(window.location + '/' + 'reports');
-							});
-						}
-
-						function createButton(label, container) {
-								var btn = L.DomUtil.create('button', '', container);
-								btn.setAttribute('type', 'button');
-								btn.innerHTML = label;
-								return btn;
+							for (const property in sensor_data) {
+								x = sensor_data[property]['lat'];
+								y = sensor_data[property]['lon'];
+								var circleMarker = L.circleMarker([x, y], {
+									color: 'blue',
+									fillColor: 'blue',
+									fillOpacity: 0.5,
+									radius: 10
+								}).addTo(map);
+								var text = "Sensor " + property.toString() + "<br>" +
+										"PM1 in your area: " + sensor_data[property]['pm1'] + "<br>" +
+										"PM2.5 in your area: " + sensor_data[property]['pm25'] + "<br>" +
+										"PM10 in your area: " + sensor_data[property]['pm10'] + "<br>";
+								addButtons(circleMarker, text);
 							}
 
-						function onMapClick(e) {
-							var popup = L.popup();
-							
-							popup
-								.setLatLng(e.latlng)
-								.setContent('You clicked the map')
-								.openOn(map);
-						}
-						
-						// function revertUrl(e) {
-						//	alert("reverting");
-						//	window.open(window.location.slice(0, url.lastIndexOf('/')));
-						//}
+							function addButtons(map_object, text) {
+								// Create button(s) for the marker popup
+								btnDiv = document.createElement('div'); // Dom = document object model -- creates div html element
+								exploreButton = createButton('Explore Data', btnDiv); // creates btn in container
+								reportButton = createButton('View Report', btnDiv); // creates btn in container
+								
+								// Add HTML content to the div element
+								btnDiv.innerHTML = text + '<br>'; // Inner html concatenates, to add more later use +=
+								btnDiv.append(exploreButton);
+								btnDiv.append(reportButton);
 
-						map.on('click', onMapClick);
-						// map.on('remove', revertUrl);
+								map_object.bindPopup(btnDiv);
+
+								L.DomEvent.on(exploreButton, 'click', function () {
+								window.open(window.location + '/' + 'dashapp');
+								});
+
+								L.DomEvent.on(reportButton, 'click', function () {
+									window.open('https://www.dropbox.com/sh/spwnq0yqvjvewax/AADk0c2Tum-7p_1ul6xiKzrPa?dl=0&preview={{ today }}.zip');
+								});
+							}
+
+							function createButton(label, container) {
+									var btn = L.DomUtil.create('button', '', container);
+									btn.setAttribute('type', 'button');
+									btn.innerHTML = label;
+									return btn;
+								}
+
+							function onMapClick(e) {
+								var popup = L.popup();
+								
+								popup
+									.setLatLng(e.latlng)
+									.setContent('You clicked the map')
+									.openOn(map);
+							}
+							
+							// function revertUrl(e) {
+							//	alert("reverting");
+							//	window.open(window.location.slice(0, url.lastIndexOf('/')));
+							//}
+
+							map.on('click', onMapClick);
+							// map.on('remove', revertUrl);
+						});
 					</script>
 				</div>
 			</div>

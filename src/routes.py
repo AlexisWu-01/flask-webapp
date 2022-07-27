@@ -1,5 +1,6 @@
 from flask import render_template
 from flask import current_app as app
+from datetime import date
 # from markupsafe import escape
 # from flask_wtf import FlaskForm
 # from flask_wtf.file import FileField, FileRequired
@@ -29,11 +30,20 @@ from .access_quantaq import append_sensor_data, update_sensor_list
 # 	image = FileField(validators=[FileRequired()])
 # 	submit = SubmitField()
 
+@app.route('/base')
+def base_func():
+	today = date.today()
+	today = today.strftime("%Y-04")
+	print(today)
+	return render_template("base.html", today=today)
+
 @app.route('/')
 def map_func():
+	today = date.today()
+	today = today.strftime("%Y-04")
 	data = {}
 	append_sensor_data(data)
-	return render_template("map.html", data=data)
+	return render_template("map.html", data=data, today=today)
 
 @app.route('/#close/reports/')
 @app.route('/reports/')
