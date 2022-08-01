@@ -42,7 +42,9 @@ def base_func():
 @app.route('/')
 def map_func():
 	today = date.today()
-	today = today.strftime("%Y-04")
+	year = today.year
+	month = today.month - 1
+	today = f"{year}-0{month}" if month < 10 else f"{year}-{month}"
 	data = {}
 	append_sensor_data(data)
 	return render_template("map.html", data=data, today=today)
