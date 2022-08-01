@@ -33,8 +33,10 @@ from .access_quantaq import append_sensor_data, update_sensor_list
 @app.route('/base')
 def base_func():
 	today = date.today()
-	today = today.strftime("%Y-04")
-	print(today)
+	year = today.year
+	month = today.month - 1
+	today = f"{year}-0{month}" if month < 10 else f"{year}-{month}"
+	# print(today)
 	return render_template("base.html", today=today)
 
 @app.route('/')
