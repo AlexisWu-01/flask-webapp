@@ -68,9 +68,13 @@ There are two packages in this repository: `src` and `data-exploration-tool`.
 
 Upon creation of this document, this webapp is meant to be deployed on Linode. If this has changed, or if Linode services were in some way updated, this guide may not be 100% accurate.
 
-To follow along and do any server maintenance, you can ssh in or log in through Linode's console. I usually ssh in. First get the IP address of the server, then run `ssh root@(ip)`. First I will walk through the process of setting up a server for the first time, should it be necessary.
+To follow along and do any server maintenance, you can ssh in or log in through Linode's console. I usually ssh in. First get the IP address of the server, then run `ssh root@(ip)`. **Note: You will NOT be able to ssh in with the Symantec Endpoint Protection firewall enabled.** 
+
+**You will have to press `WIN + R` and run `smc -stop`.**
 
 ### Create the Linode ###
+
+First I will walk through the process of setting up a server for the first time, should it be necessary.
 
 In the cloud manager, you will be able to access all Linode servers belonging to the airpartners account (hopefully just one). In creating the current Linode, I selected Nanode as our storage needs are not extreme yet. This may change. The server is running on an Ubuntu 20.04 image.
 
@@ -120,4 +124,8 @@ Run `pip install -r requirements.txt` and watch the magic happen.
 
 ### Run the Server ###
 
-Now we're hopefully able to run the server. There are certain security measures to set up that make the system safer, but Air Partners is not exactly a target for attack either. When we `flask run`, we need to add the extra flag `--host=0.0.0.0` to let Flask know we are deploying it to the internet. Now navigate to the IP and hopefully it works! 
+Now we're hopefully able to run the server. There are certain security measures to set up that make the system safer, but Air Partners is not exactly a target for attack either. When we `flask run`, we need to add the extra flag `--host=0.0.0.0` to let Flask know we are deploying it to the internet. Now navigate to the IP and hopefully it works!
+
+OK, so the server works. What about when you end the SSH login session? Try closing it, then accessing the same site. So why doesn't it work? When you SSH in, you are starting a session with the server, which can be thought of as a process. Anything done as a result of this process is a child process of our session, and is therefore ended when the parent itself terminates. Hence we need some sort of distinguishment for the app starting. With Node.js projects, I believe byobu or other tools are go-to. In this case, we can use `screen` or `nohup` (no hangup).
+
+As of right now, I have chosen to use `nohup flask run --host=0.0.0.0` to maintain accessibility. This may not be the most scalable design decision, so I leave the choice to replace this with a more user-friendly alternative in the hands of my successors. Once we run this command, we can safely end the SSH session without ending the child process, meaning the webapp is now accessible.
