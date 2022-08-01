@@ -18,7 +18,7 @@
 				<p>Here you are able to interact with the map to locate our sensors and see real data in real time.</p>
 			</div>
 			<div style="width: 90%; height: 100%" id="mapContainer">
-				<div id="map" style="height: 440px; border: 1px solid #AAA;">Test
+				<div id="map" style="height: 440px; border: 1px solid #AAA;">
 					<script type="text/javascript">
 						document.addEventListener("DOMContentLoaded", function(event) { 
 							var sensor_data = {{ data|tojson|safe }};
@@ -39,37 +39,38 @@
 								}).addTo(map);
 
 							for (const property in sensor_data) {
+								color = sensor_data[property]['pm1'][2];
 								x = sensor_data[property]['lat'];
 								y = sensor_data[property]['lon'];
 								var circleMarker = L.circleMarker([x, y], {
-									color: 'blue',
-									fillColor: 'blue',
+									color: color,
+									fillColor: color,
 									fillOpacity: 0.5,
 									radius: 10
 								}).addTo(map);
-								var text = "Sensor " + property.toString() + "<br>" +
-										"PM1 in your area: " + sensor_data[property]['pm1'] + "<br>" +
-										"PM2.5 in your area: " + sensor_data[property]['pm25'] + "<br>" +
-										"PM10 in your area: " + sensor_data[property]['pm10'] + "<br>";
+								var text = "Sensor " + sensor_data[property]['desc'] + "<br>" +
+										"PM" + "<sub>1</sub>" + " in your area: " + sensor_data[property]['pm1'][1] + " (" + sensor_data[property]['pm1'][0] + ")" + "<br>" +
+										"PM" + "<sub>2.5</sub>" + " in your area: " + sensor_data[property]['pm25'][1] + " (" + sensor_data[property]['pm25'][0] + ")" + "<br>" +
+										"PM" + "<sub>10</sub>" + " in your area: " + sensor_data[property]['pm10'][1] + " (" + sensor_data[property]['pm10'][0] + ")" +  "<br>";
 								addButtons(circleMarker, text);
 							}
 
 							function addButtons(map_object, text) {
 								// Create button(s) for the marker popup
 								btnDiv = document.createElement('div'); // Dom = document object model -- creates div html element
-								exploreButton = createButton('Explore Data', btnDiv); // creates btn in container
+								// exploreButton = createButton('Explore Data', btnDiv); // creates btn in container
 								reportButton = createButton('View Report', btnDiv); // creates btn in container
 								
 								// Add HTML content to the div element
 								btnDiv.innerHTML = text + '<br>'; // Inner html concatenates, to add more later use +=
-								btnDiv.append(exploreButton);
+								// btnDiv.append(exploreButton);
 								btnDiv.append(reportButton);
 
 								map_object.bindPopup(btnDiv);
 
-								L.DomEvent.on(exploreButton, 'click', function () {
-								window.open(window.location + '/' + 'dashapp');
-								});
+								// L.DomEvent.on(exploreButton, 'click', function () {
+								// window.open(window.location + '/' + 'dashapp');
+								// });
 
 								L.DomEvent.on(reportButton, 'click', function () {
 									window.open('https://www.dropbox.com/sh/spwnq0yqvjvewax/AADk0c2Tum-7p_1ul6xiKzrPa?dl=0&preview={{ today }}.zip');
@@ -83,21 +84,21 @@
 									return btn;
 								}
 
-							function onMapClick(e) {
-								var popup = L.popup();
-								
-								popup
-									.setLatLng(e.latlng)
-									.setContent('You clicked the map')
-									.openOn(map);
-							}
+							// function onMapClick(e) {
+							//	var popup = L.popup();
+							//	
+							//	popup
+							//		.setLatLng(e.latlng)
+							//		.setContent('You clicked the map')
+							//		.openOn(map);
+							// }
 							
 							// function revertUrl(e) {
 							//	alert("reverting");
 							//	window.open(window.location.slice(0, url.lastIndexOf('/')));
 							//}
 
-							map.on('click', onMapClick);
+							// map.on('click', onMapClick);
 							// map.on('remove', revertUrl);
 						});
 					</script>
