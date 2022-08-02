@@ -129,3 +129,17 @@ Now we're hopefully able to run the server. There are certain security measures 
 OK, so the server works. What about when you end the SSH login session? Try closing it, then accessing the same site. So why doesn't it work? When you SSH in, you are starting a session with the server, which can be thought of as a process. Anything done as a result of this process is a child process of our session, and is therefore ended when the parent itself terminates. Hence we need some sort of distinguishment for the app starting. With Node.js projects, I believe byobu or other tools are go-to. In this case, we can use `screen` or `nohup` (no hangup).
 
 As of right now, I have chosen to use `nohup flask run --host=0.0.0.0` to maintain accessibility. This may not be the most scalable design decision, so I leave the choice to replace this with a more user-friendly alternative in the hands of my successors. Once we run this command, we can safely end the SSH session without ending the child process, meaning the webapp is now accessible.
+
+# Next Steps #
+
+ There are a few directions the next developer could take this project.
+
+ 1. Asynchronous API calls
+
+ There exists a Python module called AsyncIO structured to act somewhat like the JavaScript await/async format. This likely allows for `flask run` to render HTML templates while awaiting for certain Python variables to be generated. My vision of how this might look is the following:
+
+ a. We await the QuantAQ API call and in the meantime have an empty dictionary (which will be a JSON object) to dump into our HTML document. When we `flask run`, we render the HTML template with an empty JSON, but it fills up before executing the JavaScript and loading the real-time map.
+
+ 2. Dynamic Map
+
+ At the moment, and this is an enormous oversight on my part, the real-time map does not actually update in real-time. It would be nice if there a way to connect to sensors directly, but it is most likely that one would have to constantly be accessing the QuantAQ API to divulge information in real-time. There are two solutions, one of which I believe would be more valuable to the next developer's learning than the other. Perhaps the easier would be to synchronize the real-time map with QuantAQ's map on their website. Instead of designing Air Partners' own real-time map, allow QuantAQ to do the data gathering and us to forward that map to stakeholders. There is no need to reinvent the wheel. But if you find yourself particularly inventive, it would be both instructive and valuable to look into seeing if there is a way to reboot the server every *n* timesteps. Whenever the server is started is when the API call is made, and afterwards information is not updated. In order to fix this, it would be prudent to look into a periodic server restart at reasonable time intervals, like every hour, maybe every three hours.
