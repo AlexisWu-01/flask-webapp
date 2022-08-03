@@ -129,3 +129,13 @@ Now we're hopefully able to run the server. There are certain security measures 
 OK, so the server works. What about when you end the SSH login session? Try closing it, then accessing the same site. So why doesn't it work? When you SSH in, you are starting a session with the server, which can be thought of as a process. Anything done as a result of this process is a child process of our session, and is therefore ended when the parent itself terminates. Hence we need some sort of distinguishment for the app starting. With Node.js projects, I believe byobu or other tools are go-to. In this case, we can use `screen` or `nohup` (no hangup).
 
 As of right now, I have chosen to use `nohup flask run --host=0.0.0.0` to maintain accessibility. This may not be the most scalable design decision, so I leave the choice to replace this with a more user-friendly alternative in the hands of my successors. Once we run this command, we can safely end the SSH session without ending the child process, meaning the webapp is now accessible.
+
+### Make Changes to the Server Code ###
+
+Undoubtedly there are improvements that can be made to the webapp. To do so, one can start another SSH session and pull changes from Git. There's one problem though: the nohup process doesn't depend on sessions. Thus it is still running in the background, despite us starting another SSH session. For the enthusiastic crowd, making a Bash script to solve this problem would be fairly easy. Otherwise, we can solve this problem with some manual commands.
+
+1. Run `ps`. See that it doesn't show the background processes? We have to force it to show background processes with `ps -ef`.
+2. Locate the PID (second column) of the process. You can make this easier by running `ps -ef |grep "flask run --host=0.0.0.0"`, assuming no changes have been made to the actual run command.
+3. Enter `kill (PID val)`.
+
+If you would like to write a bash script to do this for us, visit https://stackoverflow.com/questions/17385794/how-to-get-the-process-id-to-kill-a-nohup-process to learn more.
