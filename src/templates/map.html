@@ -13,101 +13,125 @@
 	<body>
 		{% block content %}
 		<div class="main">
-			<div class="main_text">
+			<div class="preamble">
 				<h1><b>Real Time Map</b></h1>
-				<p>Here you are able to interact with the map to locate our sensors and see real data in real time.</p>
+					<p>Here you are able to interact with the map to locate our sensors and see real data in real time.</p>
+				
+					<br>
+					<br>
+				<b>
+				What's in the Air I'm Breathing?
+				</b>
+				<br><br>
+				Particulate Matter, or PM, refers to small droplets or particles suspended in the air. There are strong correlations between the concentration of PM in the air and various health issues and disorders, from asthma to cardiovascular diseases, and even mental/neurological disorders. There are three size classifications of PM that are detected by our sensors: PM<sub>10</sub>, PM<sub>2.5</sub>, and PM<sub>1</sub>. PM data are reported as mass concentration (µg/m<sup>3</sup>), which can be interpreted as the total mass of these particles in a volume of air about the size of a stove. 
 			</div>
-			<div style="width: 90%; height: 100%" id="mapContainer">
-				<div id="map" style="height: 440px; border: 1px solid #AAA;">
-					<script type="text/javascript">
-						document.addEventListener("DOMContentLoaded", function(event) { 
-							var sensor_data = {{ data|tojson|safe }};
-							const keys = Object.keys(sensor_data);
+			<div class="main_text">
+				<div id="mapContainer">
+					<div id="map" style="height: 440px; border: 1px solid #AAA;">
+						<script type="text/javascript">
+							document.addEventListener("DOMContentLoaded", function(event) { 
+								var sensor_data = {{ data|tojson|safe }};
+								const keys = Object.keys(sensor_data);
 
-							console.log(sensor_data);
+								console.log(sensor_data);
 
-							var lat = 42.3126;
-							var long =  -71.0899;
-							var map = new L.map('map', {'zoomControl':false}).setView([42.35, -71.08], 13);
+								var lat = 42.3126;
+								var long =  -71.0899;
+								var map = new L.map('map', {'zoomControl':false}).setView([42.35, -71.08], 13);
 
-							// load a tile layer 
-							L.tileLayer('http://tiles.mapc.org/basemap/{z}/{x}/{y}.png',
-								{
-								attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>, Data by <a href="http://mass.gov/mgis">MassGIS</a>',
-								maxZoom: 17,
-								minZoom: 9
-								}).addTo(map);
+								// load a tile layer 
+								L.tileLayer('http://tiles.mapc.org/basemap/{z}/{x}/{y}.png',
+									{
+									attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>, Data by <a href="http://mass.gov/mgis">MassGIS</a>',
+									maxZoom: 17,
+									minZoom: 9
+									}).addTo(map);
 
-							for (const property in sensor_data) {
-								color = sensor_data[property]['pm1'][2];
-								x = sensor_data[property]['lat'];
-								y = sensor_data[property]['lon'];
-								var circleMarker = L.circleMarker([x, y], {
-									color: color,
-									fillColor: color,
-									fillOpacity: 0.5,
-									radius: 10
-								}).addTo(map);
-								var text = "Sensor " + sensor_data[property]['desc'] + "<br>" +
-										"PM" + "<sub>1</sub>" + " in your area: " + sensor_data[property]['pm1'][1] + " (" + sensor_data[property]['pm1'][0] + ")" + "<br>" +
-										"PM" + "<sub>2.5</sub>" + " in your area: " + sensor_data[property]['pm25'][1] + " (" + sensor_data[property]['pm25'][0] + ")" + "<br>" +
-										"PM" + "<sub>10</sub>" + " in your area: " + sensor_data[property]['pm10'][1] + " (" + sensor_data[property]['pm10'][0] + ")" +  "<br>";
-								addButtons(circleMarker, text);
-							}
-
-							function addButtons(map_object, text) {
-								// Create button(s) for the marker popup
-								btnDiv = document.createElement('div'); // Dom = document object model -- creates div html element
-								// exploreButton = createButton('Explore Data', btnDiv); // creates btn in container
-								reportButton = createButton('View Report', btnDiv); // creates btn in container
-								
-								// Add HTML content to the div element
-								btnDiv.innerHTML = text + '<br>'; // Inner html concatenates, to add more later use +=
-								// btnDiv.append(exploreButton);
-								btnDiv.append(reportButton);
-
-								map_object.bindPopup(btnDiv);
-
-								// L.DomEvent.on(exploreButton, 'click', function () {
-								// window.open(window.location + '/' + 'dashapp');
-								// });
-
-								L.DomEvent.on(reportButton, 'click', function () {
-									window.open('https://www.dropbox.com/sh/spwnq0yqvjvewax/AADk0c2Tum-7p_1ul6xiKzrPa?dl=0&preview={{ today }}.zip');
-								});
-							}
-
-							function createButton(label, container) {
-									var btn = L.DomUtil.create('button', '', container);
-									btn.setAttribute('type', 'button');
-									btn.innerHTML = label;
-									return btn;
+								for (const property in sensor_data) {
+									color = sensor_data[property]['pm1'][2];
+									x = sensor_data[property]['lat'];
+									y = sensor_data[property]['lon'];
+									var circleMarker = L.circleMarker([x, y], {
+										color: color,
+										fillColor: color,
+										fillOpacity: 0.5,
+										radius: 10
+									}).addTo(map);
+									var text = "Sensor " + sensor_data[property]['desc'] + "<br>" +
+											"PM" + "<sub>1</sub>" + " in your area: " + sensor_data[property]['pm1'][1] + " (" + sensor_data[property]['pm1'][0] + ")" + "<br>" +
+											"PM" + "<sub>2.5</sub>" + " in your area: " + sensor_data[property]['pm25'][1] + " (" + sensor_data[property]['pm25'][0] + ")" + "<br>" +
+											"PM" + "<sub>10</sub>" + " in your area: " + sensor_data[property]['pm10'][1] + " (" + sensor_data[property]['pm10'][0] + ")" +  "<br>";
+									addButtons(circleMarker, text);
 								}
 
-							// function onMapClick(e) {
-							//	var popup = L.popup();
-							//	
-							//	popup
-							//		.setLatLng(e.latlng)
-							//		.setContent('You clicked the map')
-							//		.openOn(map);
-							// }
-							
-							// function revertUrl(e) {
-							//	alert("reverting");
-							//	window.open(window.location.slice(0, url.lastIndexOf('/')));
-							//}
+								function addButtons(map_object, text) {
+									// Create button(s) for the marker popup
+									btnDiv = document.createElement('div'); // Dom = document object model -- creates div html element
+									// exploreButton = createButton('Explore Data', btnDiv); // creates btn in container
+									reportButton = createButton('View Report', btnDiv); // creates btn in container
+									
+									// Add HTML content to the div element
+									btnDiv.innerHTML = text + '<br>'; // Inner html concatenates, to add more later use +=
+									// btnDiv.append(exploreButton);
+									btnDiv.append(reportButton);
 
-							// map.on('click', onMapClick);
-							// map.on('remove', revertUrl);
-						});
-					</script>
+									map_object.bindPopup(btnDiv);
+
+									// L.DomEvent.on(exploreButton, 'click', function () {
+									// window.open(window.location + '/' + 'dashapp');
+									// });
+
+									L.DomEvent.on(reportButton, 'click', function () {
+										window.open('https://www.dropbox.com/sh/spwnq0yqvjvewax/AADk0c2Tum-7p_1ul6xiKzrPa?dl=0&preview={{ today }}.zip');
+									});
+
+								}
+
+								function createButton(label, container) {
+										var btn = L.DomUtil.create('button', '', container);
+										btn.setAttribute('type', 'button');
+										btn.innerHTML = label;
+										return btn;
+									}
+
+								// function onMapClick(e) {
+								//	var popup = L.popup();
+								//	
+								//	popup
+								//		.setLatLng(e.latlng)
+								//		.setContent('You clicked the map')
+								//		.openOn(map);
+								// }
+								
+								// function revertUrl(e) {
+								//	alert("reverting");
+								//	window.open(window.location.slice(0, url.lastIndexOf('/')));
+								//}
+
+								// map.on('click', onMapClick);
+								// map.on('remove', revertUrl);
+							});
+						</script>
+					</div>
+				</div>
+				<div class="explanations">
+					<b> More Info </b>
+					<br>
+					<br>
+					<li>
+						<b>PM<sub>10</sub></b> : Mass concentration (µg/m<sup>3</sup>) of particles about 10 times smaller than a grain of sand. They are typically generated by construction work, road dust, and windblown dust.
+					</li>
+					<br>
+					<li>
+						<b>PM<sub>2.5</sub></b> : Mass concentration (µg/m<sup>3</sup>) of particles about 40 times smaller than a grain of sand. Sources of these pollutants are usually a mixture of cooking, fossil fuel combustion (gas-powered vehicles, diesel buses, motorcycles, airplanes, etc.), and chemical reactions in the atmosphere between pollutants.
+					</li>
+					<br>
+					<li>
+						<b>PM<sub>1</sub></b> : Mass concentration (µg/m<sup>3</sup>) of particles about 50 times smaller than a grain of powdered sugar. Sources of these pollutants include combustion (fossil fuels, fires, and cooking), and chemical reactions in the atmosphere. PM<sub>1</sub> is still not regulated despite increasing evidence from epidemiology studies that smaller particles are responsible for most adverse health impacts.
+					</li>
 				</div>
 			</div>
-			<br>
-			<div></div>
 		</div>
-		
 		{% endblock %}
 	</body>
 	

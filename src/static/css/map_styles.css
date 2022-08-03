@@ -3,12 +3,25 @@ a, a:hover, a:visited, a:active {
     text-decoration: none;
 }
 
+.preamble {
+    margin: auto;
+    width:90%;
+}
+
+.main_text_child {
+    margin:auto;
+}
+
 #mapContainer {
+    width: 90%;
+    height: 100%;
     margin:auto;
     padding:20px;
 }
 
-.main_text {
-    margin:auto;
-    width:90%;
+.explanations {
+    width: 90%;
+    margin: auto;
+    padding: 2rem;
+    padding-top: 10px;
 }
