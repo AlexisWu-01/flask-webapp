@@ -1,5 +1,5 @@
 import pandas as pd
-from .csv_file_paths import final_flights
+from csv_file_paths import final_flights
 
 def add_flight_data(df, date_time_column_name = "timestamp_local"):
     df_flights = pd.read_parquet(final_flights)

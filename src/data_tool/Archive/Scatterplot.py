@@ -10,7 +10,7 @@ RUN THIS FILE TO DISPLAY THE GRAPHS
 '''
 
 #call BarChart class defined in barchart_class.py which should be in the same repo
-from .scatterplot_class import ScatterPlot
+from scatterplot_class import ScatterPlot
 scatterplot_class = ScatterPlot()
 
 #locate time slot

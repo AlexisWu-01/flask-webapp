@@ -8,11 +8,25 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
-from .filter_graph import FilterGraph # import from supporting file (contained in this repo)
+from .Archive.filter_graph import FilterGraph # import from supporting file (contained in this repo)
 from .graph_frame import GraphFrame
 
 
 class Polar(GraphFrame):
+
+    def get_explanation(self):
+        return [
+            html.P([html.B("Polar Plot:"), " Shows the pollution levels at a certain location based on wind speed and direction. ",
+            "Select a sensor location, select a date range between September 2019 and April 2020, and select one pollutant at a time. ",
+            ]),
+            html.P([
+            "The directions shown on the polar plot represent the direction the wind was blowing ", html.B("from"), ". ",
+            "This type of graph can help with locating pollution sources, particularly if a large number of pollutants are ",
+            "blowing in from a certain direction."
+            ]),
+        ]
+
+
     def get_html(self):
         # children = ...
         return \
@@ -22,7 +36,7 @@ class Polar(GraphFrame):
                         "At",
                         self.sensor_picker(),
                         ", what were the concentrations of ",
-                        self.pollutant_picker(),
+                        self.pollutant_picker(multi = False, show_flights = False),
                         " on the date range of ",
                         self.date_picker(),
                         "?"
@@ -102,12 +116,24 @@ class PolarClass(FilterGraph):
                               xanchor='left',
                               yanchor='bottom',
                               font=dict(size=12 ))]
-        fig.update_layout(margin = {'t': 0, 'l': 360, 'r': 360})
+
+        margins = 200
+        fig.update_layout(margin = {'t': 0, 'l': margins, 'r': margins})
         # fig.update_traces(go.Scatterpolar(
         #     text=df[pollutant],
         #     customdata=df.index,
         #     hovertemplate='interesting<br>%{text}<br><b>{customdata}</b>'
         # ))
+
+        # Add images
+        # fig.add_layout_image(
+        #     dict(
+        #         source="C:/dev/Air Partners/Data Analysis/data/east_boston/maps/sensor_sn11.png",
+        #         x=0,
+        #         y=0,
+        #     )
+        # )
+        # fig.update_layout(template="plotly_white")
 
         return fig
 

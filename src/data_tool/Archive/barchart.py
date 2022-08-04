@@ -1,10 +1,9 @@
 from dash import Dash, dcc, html, Input, Output
 import pandas as pd
-
-from .data_importer import DataImporter
+from data_importer import DataImporter
 
 #call BarChart class defined in barchart_class.py which should be in the same repo
-from .barchart_class import BarChart
+from barchart_class import BarChart
 barchart_class = BarChart()
 
 #locate time slot

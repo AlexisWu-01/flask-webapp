@@ -1,5 +1,5 @@
 import pandas as pd
-from .data_importer import DataImporter
+from ..data_importer import DataImporter
 
 class FilterGraph():
 

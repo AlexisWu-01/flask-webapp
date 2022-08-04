@@ -1,8 +1,8 @@
 import plotly.graph_objs as go
 import pandas as pd
-from .csv_file_paths import raw_csv_paths, processed_csv_paths # import paths to csv files from another file in this repo.
+from csv_file_paths import raw_csv_paths, processed_csv_paths # import paths to csv files from another file in this repo.
     # you should make a copy of csv_file_paths.py and change the path names to match the file locations on your computer.
-from .add_flight_data import add_flight_data
+from add_flight_data import add_flight_data
 
 class FilterGraph():
 
