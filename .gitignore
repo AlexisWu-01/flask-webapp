@@ -14,4 +14,4 @@ src/data_tool/my_data_directory.py
 src/data_tool/data/east-boston/raw/*
 src/data_tool/data/east_boston/raw/*
 src/data_tool/data/flights/raw/*
-src/data_tool2
+src/data_tool/__pycache__/

@@ -52,22 +52,31 @@ def append_sensor_data(data={}):
     for id in sns:
         data_raw = client.data.list(sn=sns[id][0], start=str(date.today()), sort="timestamp,asc", limit=1)
         
-        # data_raw = client.data.bydate(sn=sns[id], date=str(date.today()), sort="timestamp,asc", limit=1)
-        # data_raw = client.data.get(id=id, sn=sns[id])
         if len(data_raw) > 0:
             d = data_raw[0]
-            data[id] = {'lat': d['geo']['lat'] if d['geo']['lat'] is not None else -1,
-                        'lon': d['geo']['lon'] if d['geo']['lon'] is not None else -1,
-                        'pm1': [d['pm1'], "Good", "green"] if d['pm1'] < 2 else [d['pm1'], "Okay","yellow"] if d["pm1"] >= 2 and d['pm1'] < 5 else [d['pm1'], "Bad",'red'] if d['pm1'] >= 5 else "None",
-                        'pm25': [d['pm25'], "Good"] if d['pm25'] < 5 else [d['pm25'], "Okay"] if d["pm25"] >= 5 and d['pm25'] < 12.5 else [d['pm25'], "Bad"] if d['pm25'] >= 12.5 else "None",
-                        'pm10': [d['pm10'], "Good"] if d['pm10'] < 20 else [d['pm10'], "Okay"] if d["pm10"] >= 20 and d['pm10'] < 35 else [d['pm10'], "Bad"] if d['pm10'] >= 35 else "None",
-                        'desc': sns[id][1]}
+            data[id] = {
+                'lat': d['geo']['lat'] if d['geo']['lat'] is not None else -1,
+                'lon': d['geo']['lon'] if d['geo']['lon'] is not None else -1,
+                'pm1': evaluate_pm(d.get('pm1'), 2, 5),
+                'pm25': evaluate_pm(d.get('pm25'), 5, 12.5),
+                'pm10': evaluate_pm(d.get('pm10'), 20, 35),
+                'desc': sns[id][1]
+            }
 
-            if 'met' in d: # For compatibility with older sensors
-                if d['met'] is not None:
-                    data[id]['met'] = d['met']
-                else:
-                    data[id]['met'] = -1
+            if 'met' in d:  # For compatibility with older sensors
+                data[id]['met'] = d['met'] if d['met'] is not None else -1
+
+def evaluate_pm(value, threshold_okay, threshold_bad):
+    if value is None:
+        return "None"
+    elif value < threshold_okay:
+        return [value, "Good", "green"]
+    elif threshold_okay <= value < threshold_bad:
+        return [value, "Okay", "yellow"]
+    else:
+        return [value, "Bad", "red"]
+
+
 
 # def plot_sensor_data(data, plots):
 #     for id in data:

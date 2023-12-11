@@ -1,8 +1,7 @@
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
-import dash_core_components as dcc
-
+from dash import dcc
 def get_sensor_map():
     print("Starting getting sensor map...")
     latitude = [42.38436682275741, 42.366293100928964, 42.372108131433066, 42.36425867647669, 42.361552197618515, 42.38273398676193]
